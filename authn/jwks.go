@@ -11,7 +11,7 @@ import (
 	"github.com/go-jose/go-jose/v3"
 	"golang.org/x/sync/singleflight"
 
-	"github.com/grafana/authlib/cache"
+	"github.com/mahendrapaipuri/authlib/cache"
 )
 
 type KeyRetriever interface {

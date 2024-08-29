@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/grafana/authlib/authn"
+	"github.com/mahendrapaipuri/authlib/authn"
 	"github.com/grafana/authlib/claims"
 )
 

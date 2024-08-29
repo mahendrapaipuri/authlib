@@ -13,8 +13,8 @@ import (
 	"github.com/go-jose/go-jose/v3/jwt"
 	"golang.org/x/sync/singleflight"
 
-	"github.com/grafana/authlib/cache"
-	"github.com/grafana/authlib/internal/httpclient"
+	"github.com/mahendrapaipuri/authlib/cache"
+	"github.com/mahendrapaipuri/authlib/internal/httpclient"
 )
 
 // Provided for mockability of client

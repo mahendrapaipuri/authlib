@@ -9,9 +9,9 @@ import (
 	"go.opentelemetry.io/otel/trace/noop"
 	"google.golang.org/grpc"
 
-	"github.com/grafana/authlib/authn"
-	authzv1 "github.com/grafana/authlib/authz/proto/v1"
-	"github.com/grafana/authlib/cache"
+	"github.com/mahendrapaipuri/authlib/authn"
+	authzv1 "github.com/mahendrapaipuri/authlib/authz/proto/v1"
+	"github.com/mahendrapaipuri/authlib/cache"
 	"github.com/grafana/authlib/claims"
 )
 

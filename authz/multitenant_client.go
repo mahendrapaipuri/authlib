@@ -15,8 +15,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	authzv1 "github.com/grafana/authlib/authz/proto/v1"
-	"github.com/grafana/authlib/cache"
+	authzv1 "github.com/mahendrapaipuri/authlib/authz/proto/v1"
+	"github.com/mahendrapaipuri/authlib/cache"
 	"github.com/grafana/authlib/claims"
 )
 

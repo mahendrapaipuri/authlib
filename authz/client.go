@@ -14,9 +14,9 @@ import (
 	goquery "github.com/google/go-querystring/query"
 	"golang.org/x/sync/singleflight"
 
-	"github.com/grafana/authlib/authn"
-	"github.com/grafana/authlib/cache"
-	"github.com/grafana/authlib/internal/httpclient"
+	"github.com/mahendrapaipuri/authlib/authn"
+	"github.com/mahendrapaipuri/authlib/cache"
+	"github.com/mahendrapaipuri/authlib/internal/httpclient"
 )
 
 var _ client = &clientImpl{}

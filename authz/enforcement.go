@@ -5,8 +5,8 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/grafana/authlib/authn"
-	"github.com/grafana/authlib/cache"
+	"github.com/mahendrapaipuri/authlib/authn"
+	"github.com/mahendrapaipuri/authlib/cache"
 )
 
 var (

@@ -1,4 +1,4 @@
-module github.com/grafana/authlib
+module github.com/mahendrapaipuri/authlib
 
 go 1.21
 

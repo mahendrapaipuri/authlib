@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/grafana/authlib/cache"
+	"github.com/mahendrapaipuri/authlib/cache"
 )
 
 func TestClientImpl_Search(t *testing.T) {
