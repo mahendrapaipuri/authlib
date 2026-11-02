@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/go-jose/go-jose/v3"
-	"github.com/go-jose/go-jose/v3/jwt"
+	"github.com/go-jose/go-jose/v4"
+	"github.com/go-jose/go-jose/v4/jwt"
 )
 
 type TokenType = string
@@ -15,6 +15,9 @@ const (
 	TokenTypeID     TokenType = "jwt"
 	TokenTypeAccess TokenType = "at+jwt"
 )
+
+// tokenSignAlgs - Signature algorithms used to sign the tokens.
+var tokenSignAlgs = []jose.SignatureAlgorithm{jose.ES256}
 
 type Verifier[T any] interface {
 	// Verify will parse and verify provided token, if `AllowedAudiences` was configured those will be validated as well.
@@ -33,7 +36,7 @@ type VerifierBase[T any] struct {
 
 // Verify will parse and verify provided token, if `AllowedAudiences` was configured those will be validated as well.
 func (v *VerifierBase[T]) Verify(ctx context.Context, token string) (*Claims[T], error) {
-	parsed, err := jwt.ParseSigned(token)
+	parsed, err := jwt.ParseSigned(token, tokenSignAlgs)
 	if err != nil {
 		return nil, ErrParseToken
 	}
@@ -63,8 +66,8 @@ func (v *VerifierBase[T]) Verify(ctx context.Context, token string) (*Claims[T],
 	}
 
 	if err := claims.Validate(jwt.Expected{
-		Audience: v.cfg.AllowedAudiences,
-		Time:     time.Now(),
+		AnyAudience: v.cfg.AllowedAudiences,
+		Time:        time.Now(),
 	}); err != nil {
 		return nil, mapErr(err)
 	}

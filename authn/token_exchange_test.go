@@ -3,17 +3,44 @@ package authn
 import (
 	"bytes"
 	"context"
+	"crypto/ecdsa"
+	"crypto/x509"
 	"encoding/json"
+	"encoding/pem"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
-	"github.com/go-jose/go-jose/v3"
-	"github.com/go-jose/go-jose/v3/jwt"
+	"github.com/go-jose/go-jose/v4"
+	"github.com/go-jose/go-jose/v4/jwt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+var testPrivateKey = decodeTestPrivateKey([]byte(`
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEID6lXWsmcv/UWn9SptjOThsy88cifgGIBj2Lu0M9I8tQoAoGCCqGSM49
+AwEHoUQDQgAEsf6eNnNMNhl+q7jXsbdUf3ADPh248uoFUSSV9oBzgptyokHCjJz6
+n6PKDm2W7i3S2+dAs5M5f3s7d8KiLjGZdQ==
+-----END EC PRIVATE KEY-----
+`))
+
+func decodeTestPrivateKey(data []byte) *ecdsa.PrivateKey {
+	block, _ := pem.Decode(data)
+	if block == nil {
+		panic("should include PEM block")
+	}
+
+	privateKey, err := x509.ParseECPrivateKey(block.Bytes)
+	if err != nil {
+		panic("should be able to parse ec private key")
+	}
+	if privateKey.Curve.Params().Name != "P-256" {
+		panic("should be P-256 curve")
+	}
+	return privateKey
+}
 
 func TestNewTokenExchangeClient(t *testing.T) {
 	t.Run("should not be able to create client wihtout token", func(t *testing.T) {
@@ -113,14 +140,14 @@ func Test_TokenExchangeClient_Exchange(t *testing.T) {
 
 func signAccessToken(t *testing.T) string {
 	signer, err := jose.NewSigner(jose.SigningKey{
-		Algorithm: jose.HS256,
-		Key:       []byte("key"),
+		Algorithm: jose.ES256,
+		Key:       testPrivateKey,
 	}, nil)
 	require.NoError(t, err)
 
 	token, err := jwt.Signed(signer).
 		Claims(&jwt.Claims{Expiry: jwt.NewNumericDate(time.Now().Add(10 * time.Minute))}).
-		CompactSerialize()
+		Serialize()
 
 	require.NoError(t, err)
 	return token

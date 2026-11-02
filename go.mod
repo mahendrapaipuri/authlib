@@ -1,11 +1,9 @@
 module github.com/grafana/authlib
 
-go 1.21
-
-toolchain go1.21.6
+go 1.24.0
 
 require (
-	github.com/go-jose/go-jose/v3 v3.0.3
+	github.com/go-jose/go-jose/v4 v4.1.7
 	github.com/google/go-querystring v1.1.0
 	github.com/grafana/authlib/claims v0.0.0-20240814142503-ca29e2d96514
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.20.0
@@ -29,7 +27,6 @@ require (
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	go.opentelemetry.io/otel/metric v1.28.0 // indirect
-	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/text v0.16.0 // indirect

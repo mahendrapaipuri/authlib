@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-jose/go-jose/v3/jwt"
+	"github.com/go-jose/go-jose/v4/jwt"
 	"golang.org/x/sync/singleflight"
 
 	"github.com/grafana/authlib/cache"
@@ -187,7 +187,7 @@ func (c *TokenExchangeClient) getCache(ctx context.Context, key string) (string,
 func (c *TokenExchangeClient) setCache(ctx context.Context, token string, key string) error {
 	const cacheLeeway = 15 * time.Second
 
-	parsed, err := jwt.ParseSigned(token)
+	parsed, err := jwt.ParseSigned(token, tokenSignAlgs)
 	if err != nil {
 		return fmt.Errorf("failed to parse token: %v", err)
 	}
