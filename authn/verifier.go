@@ -91,7 +91,10 @@ func (v *VerifierBase[T]) Verify(ctx context.Context, token string) (*Claims[T],
 		return nil, err
 	}
 
-	if !validType(parsed, v.tokenType) {
+	// Header "typ" has been added only in Grafana 11.1.0 (https://github.com/grafana/grafana/pull/87430)
+	// So this check will fail for Grafana < 11.1.0
+	// Set VerifierConfig{DisableTypHeaderCheck: false} for those cases
+	if !v.cfg.DisableTypHeaderCheck && !validType(parsed, v.tokenType) {
 		return nil, ErrInvalidTokenType
 	}
 

@@ -84,4 +84,4 @@ type searchQuery struct {
 }
 
 // customClaims is a placeholder for any potential additional claims in the id token.
-type customClaims struct{}
+type CustomClaims struct{}

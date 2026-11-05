@@ -5,6 +5,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/grafana/authlib/authn"
 	"github.com/grafana/authlib/cache"
 )
 
@@ -30,6 +31,14 @@ func WithHTTPClient(doer HTTPRequestDoer) ClientOption {
 func WithCache(cache cache.Cache) ClientOption {
 	return func(s *EnforcementClientImpl) error {
 		s.clientOpts = append(s.clientOpts, withCache(cache))
+		return nil
+	}
+}
+
+func WithVerifier(verifier authn.Verifier[CustomClaims]) ClientOption {
+	return func(s *EnforcementClientImpl) error {
+		s.clientOpts = append(s.clientOpts, withVerifier(verifier))
+
 		return nil
 	}
 }

@@ -56,6 +56,17 @@ func withCache(cache cache.Cache) searchClientOption {
 	}
 }
 
+// withVerifier allows overriding the default verifier, which is
+// automatically created. This is useful for skipping typ header
+// verification which is not sent by Grafana < 11.1.0
+func withVerifier(verifier authn.Verifier[CustomClaims]) searchClientOption {
+	return func(c *searchClientImpl) error {
+		c.verifier = verifier
+
+		return nil
+	}
+}
+
 func newClient(cfg Config, opts ...searchClientOption) (*searchClientImpl, error) {
 	client := &searchClientImpl{
 		singlef: singleflight.Group{},
@@ -82,11 +93,19 @@ func newClient(cfg Config, opts ...searchClientOption) (*searchClientImpl, error
 		client.client = httpclient.New()
 	}
 
-	client.verifier = authn.NewVerifier[customClaims](
-		authn.VerifierConfig{},
-		authn.TokenTypeID,
-		authn.NewKeyRetriever(authn.KeyRetrieverConfig{SigningKeysURL: cfg.JWKsURL}, authn.WithHTTPClientKeyRetrieverOpt(client.client.(*http.Client))),
-	)
+	// create verifier, if not already present
+	if client.verifier == nil {
+		client.verifier = authn.NewVerifier[CustomClaims](
+			authn.VerifierConfig{},
+			authn.TokenTypeID,
+			authn.NewKeyRetriever(
+				authn.KeyRetrieverConfig{
+					SigningKeysURL: cfg.JWKsURL,
+				},
+				authn.WithHTTPClientKeyRetrieverOpt(client.client.(*http.Client)),
+			),
+		)
+	}
 
 	return client, nil
 }
@@ -95,7 +114,7 @@ type searchClientImpl struct {
 	cache    cache.Cache
 	cfg      Config
 	client   HTTPRequestDoer
-	verifier authn.Verifier[customClaims]
+	verifier authn.Verifier[CustomClaims]
 	singlef  singleflight.Group
 }
 

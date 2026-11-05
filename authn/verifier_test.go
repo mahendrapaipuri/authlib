@@ -183,6 +183,17 @@ func TestVerifier_Verify(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, claims)
 	})
+
+	t.Run("valid: disable typ header check", func(t *testing.T) {
+		verifier := NewVerifier[CustomClaims](
+			VerifierConfig{DisableTypHeaderCheck: true},
+			TokenTypeAccess,
+			NewKeyRetriever(KeyRetrieverConfig{SigningKeysURL: server.URL}),
+		)
+		claims, err := verifier.Verify(context.Background(), signFirst(t))
+		assert.NoError(t, err)
+		assert.NotNil(t, claims)
+	})
 }
 
 func signExpired(t *testing.T) string {
